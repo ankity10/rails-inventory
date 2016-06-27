@@ -1,0 +1,21 @@
+<h>items list</h>
+<table>
+<tr> 
+<th>Item ID</th>
+<th>Item name</th>
+<th>Price</th>
+<th>Stock</th>
+</tr>
+
+<% @items.each  do  |item| %>
+<tr> 
+<td><%= item.item_id %></td>
+<td><%= item.ItemName %></td>
+<td><%= item.Price %></td>
+<td><%= item.stock %></td>
+<td><%= link_to('add',:action =>'add',:item_id=>item.item_id) %></td>
+<td><%= link_to('delete',:action =>'delete',:item_id=> item.item_id) %></td>
+</tr>
+<% end %>
+
+</table>

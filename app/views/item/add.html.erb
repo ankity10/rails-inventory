@@ -1,0 +1,16 @@
+<h1>Items Quantity add</h1>
+
+<%= form_for(:item,:url=>{:action => 'update' ,:item_id=>@item.item_id,:act=>'add'})  do |i|%>
+
+Item Name :<%=  i.text_field('ItemName') %></br></br>
+Price :<%=  i.text_field('Price') %></br></br>
+Current stock :<%= @item.stock %></br></br>
+Addition to Stock:<%=  i.text_field('stock')%></br></br>
+
+<%= submit_tag('submit')%>
+
+<% end %>
+
+
+
+

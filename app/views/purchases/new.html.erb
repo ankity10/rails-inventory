@@ -1,0 +1,10 @@
+<form id="form-1" method='post'  action='' data-id="search">
+<%= tag(:input, :type => "hidden", :name => request_forgery_protection_token.to_s, :value => form_authenticity_token) %> 
+Item Name :<input name='ItemName' id='item_id'/>
+Quantity :<input name=quantity id='quantity'/>
+<input type='submit'/>
+</form>
+
+<p id="search_result"></p>
+
+

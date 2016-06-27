@@ -1,0 +1,12 @@
+<h1>Items creation</h1>
+
+
+<%= form_for(:item,:url=>{:action => 'create'})  do |i|%>
+
+Item Name :<%=  i.text_field('ItemName') %>
+Price :<%=  i.text_field('Price') %>
+Quantity :<%=  i.text_field('stock')%>
+<%= submit_tag('submit')%>
+
+<% end %>
+

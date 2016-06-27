@@ -1,0 +1,16 @@
+<h1>User#login</h1>
+
+
+<h1>Inventory Login</h1>
+
+<%= form_for(:user,:url=>{:action => 'login_check'})  do |i|%>
+
+Email ID :<%=  i.text_field('email') %></br></br>
+Password :<%=  i.password_field('password') %></br></br>
+
+<%= submit_tag('login')%>
+
+<% end %>
+
+
+
