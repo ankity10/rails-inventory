@@ -9,3 +9,32 @@ Quantity :<input name=quantity id='quantity'/>
 </form>
 
 <p id="search_result"></p>
+	
+<script type="text/javascript">
+	
+$(function()
+	{
+	console.log("Test");
+	$("[name= 'ItemName']").keyup(function(){
+		console.log("Keyup");
+		$.ajax({
+			url: 'search',
+			type: 'POST',
+			data: $(this).parent().serialize() 	,
+			//data:post_data,
+			dataType: 'text',
+			success: function(data)
+			{
+				$('#search_result').html(data);
+			// console.log(data);
+		   	}
+			
+		}).fail(function(data){
+			console.log(data);
+		});
+
+	});
+
+ });
+
+</script>

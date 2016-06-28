@@ -7,6 +7,15 @@
 <br><br>
 
 <script>
+var localstorage = {};
+localstorage['ItemName']= <%=  @ItemName %>;
+localstorage['quantity']= <%=  @quantity %>;
+localstorage['total']= <%= @total %>;
+
+var result_arr = [];
+arr.push(localstorage);
 
 
+//JSON.stringify(localstorage);
+// console.log(localstorage)
 </script>
