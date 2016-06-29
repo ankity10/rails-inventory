@@ -2,7 +2,12 @@ class PurchasesController < ApplicationController
   def new
   		@param=params[:ItemName]
       @name=params[:name]
-      @id=params[:id]          
+      @id=params[:id]
+      if !@id
+        @id=0
+      end  
+      @Price=params[:Price].to_i
+      @stock=params[:stock].to_i          
   end
 
   def search
@@ -13,6 +18,10 @@ class PurchasesController < ApplicationController
       # redirect_to action: 'new' 
   end
 
+  def search1 
+
+
+  end 
   def list
       @ItemName=params[:ItemName]
       @quantity=params[:quantity].to_i

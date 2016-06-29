@@ -1,4 +1,4 @@
-<h1>Purchases#list</h1>
+<h1>Purchases list</h1>
 
 <%=  @ItemName %>
 <%=  @quantity %>
@@ -8,14 +8,15 @@
 
 <script>
 var localstorage = {};
-localstorage['ItemName']= <%=  @ItemName %>;
+localstorage['ItemName']= '<%=  @ItemName %>';
 localstorage['quantity']= <%=  @quantity %>;
 localstorage['total']= <%= @total %>;
 
-var result_arr = [];
-arr.push(localstorage);
+var result_arr = [],i=0;
+result_arr.push(localstorage);
 
-
+// while(i++ < result_arr.length)
+// document.write(localstorage['ItemName']);
 //JSON.stringify(localstorage);
 // console.log(localstorage)
 </script>

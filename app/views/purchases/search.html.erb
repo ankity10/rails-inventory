@@ -3,6 +3,6 @@
 <tr> 
 <td>
 <%=  link_to item.ItemName, controller: "purchases", action: "new",
- name: item.ItemName,id:item.item_id %></td>
+ name: item.ItemName,id:item.item_id,Price:item.Price,stock:item.stock  %></td>
 </tr>
 <% end %>

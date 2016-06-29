@@ -1,19 +1,46 @@
-<form id="form-1" method='post'  action='list' data-id="search">
+<form id="form-1" method='post'  action='' data-id="search">
 <%= tag(:input, :type => "hidden", :name => request_forgery_protection_token.to_s, :value => form_authenticity_token) %> 
 
 <input type="hidden"  name='item_id' value=<%= @id %> />
 Item Name :<input name='ItemName' id='item_id' value=<%= @name %>  />
 
 Quantity :<input name=quantity id='quantity'/>
-<input type='submit'/>
+<input type='submit' id='new_submit'/>
 </form>
 
+<%= @Price %>
+<%= @stock %>
 <p id="search_result"></p>
+
+
+
+
+<!-- <table id='cart_list'>
+	<tr>
+		<th>
+			
+		</th>
+		<th>
+			
+		</th>
+
+		<td>
+			
+		</td>
+
+		<td>
+			
+		</td>
+	</tr>
+
+</table> -->
+
+<p id="cart_list"> </p>
 	
 <script type="text/javascript">
 	
-$(function()
-	{
+	var cart = [];	
+
 	console.log("Test");
 	$("[name= 'ItemName']").keyup(function(){
 		console.log("Keyup");
@@ -21,20 +48,45 @@ $(function()
 			url: 'search',
 			type: 'POST',
 			data: $(this).parent().serialize() 	,
-			//data:post_data,
 			dataType: 'text',
 			success: function(data)
 			{
 				$('#search_result').html(data);
-			// console.log(data);
 		   	}
 			
 		}).fail(function(data){
 			console.log(data);
 		});
-
 	});
 
- });
 
+	$('form').submit(function(e){
+		e.preventDefault();
+    	var stock = $("[name= 'quantity']").val();
+    	var stock_present=<%= @stock %>;
+    	if(stock_present < stock)
+	  		alert("quantity not available");
+	  	var total= <%= @Price %>*stock;     	
+	  	console.log(total);
+	  	item = {
+	  			quantity: stock,
+	  			item_id:  <%= @id %>,
+	  			total: total,
+	  			name: "<%= @name %>", 
+	  			}
+
+	  	cart.push(item);
+
+	  	console.log(cart);	
+	  	var i=0;
+	  	console.log(cart.length);
+	  	while(i < cart.length) 
+	  	{
+	  		$("#cart_list").append("<br />" + cart[i].name + "&nbsp;" + cart[i].quantity + "&nbsp;" + cart[i].total);
+	  		// $('#cart_list').text(cart[0]);
+	  		i++;
+	  	}
+
+
+});
 </script>
