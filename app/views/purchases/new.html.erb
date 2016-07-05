@@ -1,48 +1,65 @@
 <form id="form-1" method='post'  action='' data-id="search">
 <%= tag(:input, :type => "hidden", :name => request_forgery_protection_token.to_s, :value => form_authenticity_token) %> 
 
-<input type="hidden"  name='item_id' value=<%= @id %> />
-Item Name :<input name='ItemName' id='item_id' value=<%= @name %>  />
+<input  type="hidden"  name='item_id' />
+Item Name :<input name='ItemName' id='item_name'/>
 
 Quantity :<input name=quantity id='quantity'/>
 <input type='submit' id='new_submit'/>
 </form>
-
-<%= @Price %>
-<%= @stock %>
 <p id="search_result"></p>
-
-
-
-
-<!-- <table id='cart_list'>
-	<tr>
-		<th>
-			
-		</th>
-		<th>
-			
-		</th>
-
-		<td>
-			
-		</td>
-
-		<td>
-			
-		</td>
-	</tr>
-
-</table> -->
-
 <p id="cart_list"> </p>
-	
-<script type="text/javascript">
-	
-	var cart = [];	
+<p id="checkout"></p>
+<button type='submit' id='checkout_submit'> checkout </button>
 
-	console.log("Test");
-	$("[name= 'ItemName']").keyup(function(){
+	
+<%= @params.inspect %>
+
+
+<script type="text/javascript">
+
+function Globals () {
+	var self = this;
+	self.cart = [];
+	var val;
+	var count= 0;
+	self.checkout_total = [0];
+	
+	self.print_cart_list = function () {
+		var cart = JSON.parse(window.localStorage.getItem("cart"));
+		if (cart){
+		$("#cart_list").html("");
+		for(i = 0; i < cart.length;i++) {
+
+			$("#cart_list").append("<br />" 
+								+ cart[i].name 
+								+ "&nbsp;" 
+								+ cart[i].quantity 
+								+ "&nbsp;" 
+								+ cart[i].total);	
+		}
+		// console.log('count'+(cart.length-1));
+		// console.log(localStorage['count'+(cart.length-1)]);
+		$('#checkout').html("");
+	
+		var total_list=JSON.parse(window.localStorage.getItem("checkout_total"));
+
+		$('#checkout').append("<br /><p>checkout_total :"+total_list[cart.length-1]+"</p>");
+	}
+		
+	}
+
+	self.ajax_request = function (id) {
+		console.log("in function ajax_request");
+		var name = $('#search_result_' + id).attr("data-name");
+	  	$("#item_name").val(name);
+	 	$("[name='item_id']").val(id);	  	 	
+	}
+
+	self.debug = true;
+	
+	self.search = function () {
+		$("[name= 'ItemName']").keyup(function(){
 		console.log("Keyup");
 		$.ajax({
 			url: 'search',
@@ -51,42 +68,110 @@ Quantity :<input name=quantity id='quantity'/>
 			dataType: 'text',
 			success: function(data)
 			{
+				// console.log(data)
 				$('#search_result').html(data);
 		   	}
 			
-		}).fail(function(data){
+		})
+		.fail(function(data){
 			console.log(data);
+			});
 		});
-	});
+	}
 
 
-	$('form').submit(function(e){
-		e.preventDefault();
-    	var stock = $("[name= 'quantity']").val();
-    	var stock_present=<%= @stock %>;
-    	if(stock_present < stock)
-	  		alert("quantity not available");
-	  	var total= <%= @Price %>*stock;     	
-	  	console.log(total);
-	  	item = {
-	  			quantity: stock,
-	  			item_id:  <%= @id %>,
-	  			total: total,
-	  			name: "<%= @name %>", 
-	  			}
 
-	  	cart.push(item);
+	self.form_submission = function () {
+		$('form').submit(function(e){
+			e.preventDefault();
+		    var stock = parseInt($("[name='quantity']").val());
+		    var name = $("[name='ItemName']").val();
+		    var item_id = $("[name='item_id']").val();
+			var stock_present = $('#search_result_'+ item_id).attr("data-stock");
+		   	var price = parseInt($('#search_result_'+ item_id).attr("data-price"));
+		   	if(parseInt(stock_present) < stock ){
+			  	alert("quantity not available");
+		   	}
+			else{
+				var total= price * stock;     	
+				item = {
+				  			quantity: stock,
+				  			item_id:  item_id ,
+				  			total: total,
+				  			name: name, 
+				  		}
+				self.cart.push(item);
+				console.log(self.cart);
+				window.localStorage.setItem('cart', JSON.stringify(self.cart));
+				if(count==0){
+					self.checkout_total[count]+=item['total'];
+				}
+				else{
+				self.checkout_total[count]=self.checkout_total[count-1]+item['total'];
+				}
+				window.localStorage.setItem('checkout_total', JSON.stringify(self.checkout_total));
+				console.log('checkout_total:'+self.checkout_total[count]);
+				self.print_cart_list();	
+				count++;
+			}
+		});
 
-	  	console.log(cart);	
-	  	var i=0;
-	  	console.log(cart.length);
-	  	while(i < cart.length) 
-	  	{
-	  		$("#cart_list").append("<br />" + cart[i].name + "&nbsp;" + cart[i].quantity + "&nbsp;" + cart[i].total);
-	  		// $('#cart_list').text(cart[0]);
-	  		i++;
-	  	}
+	}
 
+	self.checkout_submission=function(){
+		
+		$('#checkout_submit').click(function(){
+			console.log("checkout pressed");
+		
+		var total_list=JSON.parse(window.localStorage.getItem("checkout_total"));	
+		var cart = JSON.parse(window.localStorage.getItem("cart"));
+		var cart_data = [];
+		var i;
+		if (cart){
+		for(i = 0; i < cart.length;i++) {
+ 				item = {
+				  			quantity: cart[i].quantity,
+				  			item_id:  cart[i].item_id ,
+				  			total: cart[i].total,
+				  			name: cart[i].name, 
+				  		}
+				cart_data.push(item);
+			}
+		}
+		// var cart_json=JSON.parse(cart_data);
 
-});
+		var post_data = {
+			utf8: $("[name='utf8']").val(), 
+			authenticity_token: $("[name='authenticity_token']").val(),
+			cart:JSON.stringify(cart_data),
+			total :total_list[cart.length-1]		
+			}
+			$.ajax({
+						url: 'new',
+						type: 'POST',
+						data: post_data,
+						dataType: 'text',
+						success: function(data)
+						{
+							localStorage.clear();
+							location.reload();
+					   	}
+						
+					})
+					.fail(function(data){
+						console.log(data);
+						});
+
+		});
+
+	}
+
+	return self;	
+}
+
+var globals = new Globals();
+globals.search();
+globals.form_submission();
+globals.print_cart_list();
+globals.checkout_submission();
 </script>
