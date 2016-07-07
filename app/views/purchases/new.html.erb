@@ -8,23 +8,33 @@ Quantity :<input name=quantity id='quantity'/>
 <input type='submit' id='new_submit'/>
 </form>
 <p id="search_result"></p>
-<p id="cart_list"> </p>
+<p id="cart_list">  
+
+</p>
 <p id="checkout"></p>
 <button type='submit' id='checkout_submit'> checkout </button>
 
-	
-<%= @params.inspect %>
 
 
 <script type="text/javascript">
 
 function Globals () {
-	var self = this;
-	self.cart = [];
+	var self = this; 
+		self.cart = JSON.parse(window.localStorage.getItem("cart"));
+		if(!self.cart)
+			self.cart=[];
 	var val;
-	var count= 0;
-	self.checkout_total = [0];
+	var count;
+	self.checkout_total =JSON.parse(window.localStorage.getItem("checkout_total"));
+	if(!self.checkout_total)
+	{
+		self.checkout_total=[0];
+		count=0;
+	}else
+	count=self.checkout_total.length;
+
 	
+
 	self.print_cart_list = function () {
 		var cart = JSON.parse(window.localStorage.getItem("cart"));
 		if (cart){
@@ -36,15 +46,15 @@ function Globals () {
 								+ "&nbsp;" 
 								+ cart[i].quantity 
 								+ "&nbsp;" 
-								+ cart[i].total);	
+								+ cart[i].total
+								+"&nbsp;"
+								+"<a href='' class='item_delete' id='"+i+"' data-id="+cart[i].item_id+ ">delete</a></td>");
 		}
-		// console.log('count'+(cart.length-1));
-		// console.log(localStorage['count'+(cart.length-1)]);
 		$('#checkout').html("");
 	
 		var total_list=JSON.parse(window.localStorage.getItem("checkout_total"));
 
-		$('#checkout').append("<br /><p>checkout_total :"+total_list[cart.length-1]+"</p>");
+		$('#checkout').append("<br /><p>checkout_total :"+total_list[self.cart.length-1]+"</p>");
 	}
 		
 	}
@@ -68,7 +78,6 @@ function Globals () {
 			dataType: 'text',
 			success: function(data)
 			{
-				// console.log(data)
 				$('#search_result').html(data);
 		   	}
 			
@@ -79,7 +88,44 @@ function Globals () {
 		});
 	}
 
+ 	self.delete_cart_item = function(){
+ 		$('.item_delete').click(function(e){
+ 			e.preventDefault();
+ 			var id=$(this).attr('id');
+ 			console.log("cart item delete");
+			
+			var i;
+			// var cart = JSON.parse(window.localStorage.getItem("cart"));
+			var cart_data=[];
+			var count1=0;
+			var checkout_total1=[0];			
 
+		 	for(i = 0; i < self.cart.length;i++) {
+
+
+		 		// console.log($('#'+id).attr('data-id'));
+		 		if(self.cart[i].item_id ==$('#'+id).attr('data-id'))
+ 				{
+ 					console.log('deleted');
+ 					continue;
+ 				}
+ 				cart_data.push(self.cart[i]);
+ 				// console.log(self.cart[i].item_id);
+ 			 	if(count1==0){
+				 	checkout_total1[count1]+=self.cart[i].total;
+				}else{
+						checkout_total1[count1]=checkout_total1[count1-1]+self.cart[i].total;
+				}
+ 				
+			}
+			console.log(cart_data);
+			console.log(checkout_total1);
+			window.localStorage.setItem('cart', JSON.stringify(cart_data));
+			window.localStorage.setItem('checkout_total',JSON.stringify(checkout_total1)); 
+		 	location.reload();
+ 	});
+
+ }
 
 	self.form_submission = function () {
 		$('form').submit(function(e){
@@ -103,6 +149,7 @@ function Globals () {
 				self.cart.push(item);
 				console.log(self.cart);
 				window.localStorage.setItem('cart', JSON.stringify(self.cart));
+				
 				if(count==0){
 					self.checkout_total[count]+=item['total'];
 				}
@@ -114,6 +161,7 @@ function Globals () {
 				self.print_cart_list();	
 				count++;
 			}
+			location.reload();
 		});
 
 	}
@@ -138,7 +186,7 @@ function Globals () {
 				cart_data.push(item);
 			}
 		}
-		// var cart_json=JSON.parse(cart_data);
+
 
 		var post_data = {
 			utf8: $("[name='utf8']").val(), 
@@ -166,6 +214,7 @@ function Globals () {
 
 	}
 
+	
 	return self;	
 }
 
@@ -174,4 +223,5 @@ globals.search();
 globals.form_submission();
 globals.print_cart_list();
 globals.checkout_submission();
+globals.delete_cart_item();
 </script>
