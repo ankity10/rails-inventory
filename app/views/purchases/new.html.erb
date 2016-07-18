@@ -103,20 +103,18 @@ function Globals () {
 		 	for(i = 0; i < self.cart.length;i++) {
 
 
-		 		// console.log($('#'+id).attr('data-id'));
 		 		if(self.cart[i].item_id ==$('#'+id).attr('data-id'))
  				{
  					console.log('deleted');
  					continue;
  				}
  				cart_data.push(self.cart[i]);
- 				// console.log(self.cart[i].item_id);
- 			 	if(count1==0){
+ 				if(count1==0){
 				 	checkout_total1[count1]+=self.cart[i].total;
 				}else{
 						checkout_total1[count1]=checkout_total1[count1-1]+self.cart[i].total;
 				}
- 				
+ 				count1++;
 			}
 			console.log(cart_data);
 			console.log(checkout_total1);
