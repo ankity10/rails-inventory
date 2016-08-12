@@ -1,0 +1,36 @@
+.form-group th, td {
+    padding: 15px;
+}
+
+.form-group table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.form-group table, td, th {
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+
+ul.nav.navbar-nav.navbar-right. li a{
+    color:white;
+}
+
+.col-xs-12.col-md-4.text-left .form-group th {
+    padding: 15px;
+}
+
+.col-xs-12.col-md-4.text-left .form-group td {
+    padding: 15px;
+}
+
+.col-xs-12.col-md-4.text-left .form-group table, td, th {
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.col-xs-12.col-md-4.text-left .form-group table {
+    border-collapse: collapse;
+    width: 100%;
+}

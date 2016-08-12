@@ -1,0 +1,14 @@
+
+ul.nav.navbar-nav.navbar-right. li a{
+    color:white;
+}
+
+#first{
+    background-color: #2980b9;
+}
+
+#form{
+    border-radius: 5px;
+
+    padding: 20px;
+}

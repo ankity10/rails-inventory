@@ -1,4 +1,5 @@
-<form id="form-1" method='post'  action='' data-id="search">
+
+<!--form id="form-1" method='post'  action='' data-id="search">
 <%= tag(:input, :type => "hidden", :name => request_forgery_protection_token.to_s, :value => form_authenticity_token) %> 
 
 <input  type="hidden"  name='item_id' />
@@ -6,14 +7,127 @@ Item Name :<input name='ItemName' id='item_name'/>
 
 Quantity :<input name=quantity id='quantity'/>
 <input type='submit' id='new_submit'/>
-</form>
-<p id="search_result"></p>
-<p id="cart_list">  
+</form-->
 
-</p>
-<p id="checkout"></p>
-<button type='submit' id='checkout_submit'> checkout </button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New Purchases</title>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top" style="border: 0px;">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">INVENTORY</a>
+        </div>
 
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+            <li><%= link_to('Add Item',:controller =>"item" ,:action =>'new')%></li>
+                <li><%= link_to('Item List',:controller =>"item" ,:action =>'display')%></li>
+                <li class="active"><%= link_to('New Purchase',:controller =>"purchases" ,:action =>'new')%></li>
+                <li><%= link_to('Logout',:controller =>"user" ,:action =>'login')%></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+<div class="container-fluid">
+        <div class="info text-center">
+            <h1 class="text-center" style="color: #000;margin-top: 90px;"> Purchase </h1>
+        </div>
+        <br>
+        <br>
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-xs-12 col-md-8 text-left" id="form" style="border: 1px solid black;">
+                <div class="row">
+                    <div class="col-xs-12 col-md-5 text-left" >
+                    	<div class="form-group">
+                	    	<form id="form-1" method='post'  action='' data-id="search">
+							<%= tag(:input, :type => "hidden", :name => request_forgery_protection_token.to_s, :value => form_authenticity_token) %> 
+                    			<input required type="hidden"  name='item_id' />
+                        		<h4 style="text-align: left;">Item Name :</h4>
+								<input  required autocomplete="off" class="form-control" name='ItemName' id='item_name' placeholder="Item Name" />
+								<p id="search_result"></p>
+                    	</div>
+                    </div>   	
+                    <div class="col-xs-12 col-md-5 text-left" >
+                    	<div class="form-group">
+                        	<h4 style="text-align: left;">Quantity :</h4>
+                        	<input required autocomplete="off" name=quantity id='quantity' placeholder="0" class="form-control" type="number" />
+                     	</div>
+                    </div>
+                    <div class="col-xs-12 col-md-2 text-left" style="margin-top: 35px;">
+                        <button type="Submit" id="new_submit" class="btn btn-default text-center" >Submit</button>
+                    </div>
+    				</form>                    
+                </div>
+                <br>
+            </div>
+        </div>
+</div>
+
+
+<div class="container-fluid">
+    <form role="form">
+        <br>
+        <br>
+        <div class="row">
+            <div class="col-md-4"></div>
+
+            <div class="col-xs-12 col-md-4 text-left" >
+                <div class="info text-center">
+                    <h3 class="text-center" style="color: #000;margin-top: 20px;">Shopping Cart </h3>
+                </div>
+                <div class="form-group" style="border: 1px solid black;border-radius: 5px;padding: 20px;">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody id="cart_list">
+                        </tbody>
+                    </table>
+                </div>
+                <br>
+                <br>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-xs-12 col-md-4 text-left">
+            <div class="form-group">
+                <h4 id="checkout" style="text-align: center;"></h4>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-4 text-left">
+            <br><br><br><br>
+            <button type="Submit" id='checkout_submit' class="btn btn-default text-center" style="padding:20px 60px 20px 60px;margin-left: 100px;">Checkout</button>
+            <br><br>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
 
 
 <script type="text/javascript">
@@ -26,8 +140,7 @@ function Globals () {
 	var val;
 	var count;
 	self.checkout_total =JSON.parse(window.localStorage.getItem("checkout_total"));
-	if(!self.checkout_total)
-	{
+	if(!self.checkout_total){
 		self.checkout_total=[0];
 		count=0;
 	}else
@@ -41,21 +154,23 @@ function Globals () {
 		$("#cart_list").html("");
 		for(i = 0; i < cart.length;i++) {
 
-			$("#cart_list").append("<br />" 
+			$("#cart_list").append("<tr><td>" 
 								+ cart[i].name 
-								+ "&nbsp;" 
+								+ "</td><td>" 
 								+ cart[i].quantity 
-								+ "&nbsp;" 
+								+ "</td><td>" 
 								+ cart[i].total
-								+"&nbsp;"
-								+"<a href='' class='item_delete' id='"+i+"' data-id="+cart[i].item_id+ ">delete</a></td>");
-		}
-		$('#checkout').html("");
+								+"</td><td>"
+								+"<a href='' class='item_delete' id='"+i+"' data-id="+cart[i].item_id+ ">delete</a></td></tr>");
+			}
+			$('#checkout').html("");
 	
-		var total_list=JSON.parse(window.localStorage.getItem("checkout_total"));
+			var total_list=JSON.parse(window.localStorage.getItem("checkout_total"));
 
-		$('#checkout').append("<br /><p>checkout_total :"+total_list[self.cart.length-1]+"</p>");
-	}
+			if(total_list[self.cart.length-1]!=undefined){
+			$('#checkout').append("Checkout Total :"+total_list[self.cart.length-1]);
+			}
+		}
 		
 	}
 

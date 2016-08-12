@@ -1,4 +1,4 @@
-<h1>Items creation</h1>
+<!--h1>Items creation</h1>
 
 
 <%= form_for(:item,:url=>{:action => 'create'})  do |i|%>
@@ -9,4 +9,77 @@ Quantity :<%=  i.text_field('stock')%>
 <%= submit_tag('submit')%>
 
 <% end %>
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top" style="border: 0px;">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">INVENTORY</a>
+        </div>
 
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+	            <li class="active"><%= link_to('Add Item',:controller =>"item",:action =>'new')%></li>
+                <li><%= link_to('Item List',:controller =>"item" ,:action =>'display')%></li>
+                <li><%= link_to('New Purchase',:controller =>"purchases" ,:action =>'new')%></li>
+                <li><%= link_to('Logout',:controller =>"user" ,:action =>'login')%></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+
+
+<div class="container-fluid">
+	<%= form_for(:item,:url=>{:action => 'create'})  do |i|%>	    
+        <div class="info text-center">
+            <h1 class="text-center" style="color: #000;margin-top: 90px;">Add Item</h1>
+        </div>
+        <br>
+        <br>
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-xs-12 col-md-4 text-left" style="border: 1px solid black;">
+                <div class="form-group">
+                    <br>
+                    <h4 style="text-align: left;">Item Name :</h4>
+                    <input required autocomplete="off" type="text" class="form-control" id="item_ItemName" name="item[ItemName]" placeholder="item_name">
+                </div>
+
+                <div class="form-group">
+                    <h4 style="text-align: left;">Price :</h4>
+                      <input required autocomplete="off" type="number" class="form-control" id="item_Price" name="item[Price]">         
+                    
+                </div>  
+
+                <div class="form-group">
+                    <h4 style="text-align: left;">Stock :</h4>
+                    <input required autocomplete="off" type="number" class="form-control" id="item_stock" placeholder=0" name="item[stock]">         
+                </div>
+
+                <center>
+                	<button type="submit" name="commit" value="submit" class="btn btn-default">Submit
+                	</button>
+                </center>
+                <br>
+            </div>
+        </div>
+    <% end %>
+</div>
+
+</body>
+</html>
